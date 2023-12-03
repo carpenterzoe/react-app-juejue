@@ -33,9 +33,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://api.chennick.wang/api/',
+        target: 'http://api.chennick.wang',
           changeOrigin: true,
-          rewrite: path => path.replace(/^\/api/, '') // 将 /api 重写为空
       }
     }
   },
