@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 import { Popup, DatePicker } from 'zarm'
 import dayjs from 'dayjs'
 
+// 将子组件传递给 forwardRef
 const PopupDate = forwardRef(({ onSelect, mode = ['year', 'month'] }, ref) => {
-  console.log('mode: ', mode);
   const [show, setShow] = useState(false)
   const [now, setNow] = useState(new Date())
 

@@ -18,8 +18,14 @@ const Home = () => {
   const [refreshing, setRefreshing] = useState(REFRESH_STATE.normal); // 下拉刷新状态
   const [loading, setLoading] = useState(LOAD_STATE.normal); // 上拉加载状态
 
+  /**
+   * useRef 返回一个带有 current 属性的对象，你可以通过 ref.current 访问当前值。
+   * useRef 与 useState 返回的状态不同之处就是：ref.current 的值是可读可变的，可以直接通过 ref.current = newValue 进行更改。
+   * 并且更改 useRef 不会触发组件的重新渲染，这是因为 react 没有对 ref 的值进行 track 操作。
+   */
   const typeRef = useRef(); // 账单类型 ref
   const monthRef = useRef(); // 月份筛选 ref
+
   const [currentSelect, setCurrentSelect] = useState({}); // 当前筛选类型
   const [currentTime, setCurrentTime] = useState(dayjs().format('YYYY-MM')); // 当前筛选时间
 
@@ -71,7 +77,7 @@ const Home = () => {
 
   // 添加账单弹窗
   const typeToggle = () => {
-    typeRef.current && typeRef.current.show()
+    typeRef.current && typeRef.current.show() // 访问子组件的方法
   };
   const monthToggle = () => {
     monthRef.current && monthRef.current.show()
@@ -135,6 +141,7 @@ const Home = () => {
           </Pull> : null
       }
     </div>
+    {/* ref 在父组件用到子组件时绑定 */}
     <PopupType ref={typeRef} onSelect={select} />
     <PopupDate ref={monthRef} mode={['year', 'month']} onSelect={selectMonth} />
   </div>
