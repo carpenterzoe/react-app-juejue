@@ -21,7 +21,7 @@ const NavBar = () => {
       onChange={changeTab}
     >
       <TabBar.Item
-        itemKey="/"
+        itemKey="/home"
         title="账单"
         icon={<CustomIcon type="zhangdan" />}
         />

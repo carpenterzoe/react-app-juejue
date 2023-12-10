@@ -5,7 +5,7 @@ import Login from '@/container/Login'
 
 const routes = [
   {
-    path: "/",
+    path: "/home",
     component: Home
   },
   {
