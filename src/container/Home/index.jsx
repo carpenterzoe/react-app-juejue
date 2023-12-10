@@ -29,6 +29,9 @@ const Home = () => {
   const [currentSelect, setCurrentSelect] = useState({}); // 当前筛选类型
   const [currentTime, setCurrentTime] = useState(dayjs().format('YYYY-MM')); // 当前筛选时间
 
+  const [totalExpense, setTotalExpense] = useState(0); // 总支出
+  const [totalIncome, setTotalIncome] = useState(0); // 总收入
+
   useEffect(() => {
     getBillList() // 初始化
   }, [page, currentSelect, currentTime])
@@ -50,6 +53,8 @@ const Home = () => {
         setList(list.concat(data.list));
       }
       setTotalPage(data.totalPage);
+      setTotalExpense(data.totalExpense.toFixed(2));
+      setTotalIncome(data.totalIncome.toFixed(2));
       // 上滑加载状态
       setLoading(LOAD_STATE.success);
       setRefreshing(REFRESH_STATE.success);
@@ -101,8 +106,8 @@ const Home = () => {
   return <div className={s.home}>
     <div className={s.header}>
       <div className={s.dataWrap}>
-        <span className={s.expense}>总支出：<b>¥ 200</b></span>
-        <span className={s.income}>总收入：<b>¥ 500</b></span>
+        <span className={s.expense}>总支出：<b>¥ { totalExpense }</b></span>
+        <span className={s.income}>总收入：<b>¥ { totalIncome }</b></span>
       </div>
       <div className={s.typeWrap}>
         <div className={s.left} onClick={typeToggle}>
