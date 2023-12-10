@@ -19,7 +19,7 @@ function App() {
   // 想要在函数组件内执行 useLocation，该组件必须被 Router 高阶组件包裹
   const location = useLocation() // 拿到 location 实例
   const { pathname } = location // 获取当前路径
-  const needNav = ['/', '/data', '/user'] // 需要底部导航栏的路径
+  const needNav = ['/home', '/data', '/user'] // 需要底部导航栏的路径
   const [showNav, setShowNav] = useState(false) // 是否展示 Nav
   useEffect(() => {
     setShowNav(needNav.includes(pathname))
