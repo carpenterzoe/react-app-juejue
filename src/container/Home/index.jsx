@@ -1,27 +1,41 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Icon, Pull, List } from 'zarm'
 import dayjs from 'dayjs'
+
 import BillItem from '@/components/BillItem'
+import PopupType from '@/components/PopupType'
+
 import { get, REFRESH_STATE, LOAD_STATE } from '@/utils' // Pull 组件需要的一些常量
 
 import s from './style.module.less'
 
 const Home = () => {
   const [currentTime, setCurrentTime] = useState(dayjs().format('YYYY-MM')); // 当前筛选时间
-  const [page, setPage] = useState(1); // 分页
+
   const [list, setList] = useState([]); // 账单列表
+
+  const [page, setPage] = useState(1); // 分页
   const [totalPage, setTotalPage] = useState(0); // 分页总数
   const [refreshing, setRefreshing] = useState(REFRESH_STATE.normal); // 下拉刷新状态
   const [loading, setLoading] = useState(LOAD_STATE.normal); // 上拉加载状态
 
+  const typeRef = useRef(); // 账单类型 ref
+  const [currentSelect, setCurrentSelect] = useState({}); // 当前筛选类型
+
   useEffect(() => {
     getBillList() // 初始化
-  }, [page])
+  }, [page, currentSelect])
 
   // 获取账单方法
   const getBillList = async () => {
     try {
-      const { data } = await get(`/api/bill/list?page=${page}&page_size=5&date=${currentTime}`);
+      const params = {
+        page,
+        date: currentTime,
+        type_id: currentSelect.id || 'all',
+        pageSize: 5,
+      }
+      const { data } = await get(`/api/bill/list`, { params });
       // 下拉刷新，重制数据
       if (page == 1) {
         setList(data.list);
@@ -54,6 +68,18 @@ const Home = () => {
     }
   }
 
+  // 添加账单弹窗
+  const toggleBillType = () => {
+    typeRef.current && typeRef.current.show()
+  };
+
+  const select = (item) => {
+    setRefreshing(REFRESH_STATE.loading);
+    // 触发刷新列表，将分页重制为 1
+    setPage(1);
+    setCurrentSelect(item)
+  }
+
   return <div className={s.home}>
     <div className={s.header}>
       <div className={s.dataWrap}>
@@ -61,8 +87,8 @@ const Home = () => {
         <span className={s.income}>总收入：<b>¥ 500</b></span>
       </div>
       <div className={s.typeWrap}>
-        <div className={s.left}>
-          <span className={s.title}>类型 <Icon className={s.arrow} type="arrow-bottom" /></span>
+        <div className={s.left} onClick={toggleBillType}>
+          <span className={s.title}>{currentSelect.name || '全部类型'} <Icon className={s.arrow} type="arrow-bottom" /></span>
         </div>
         <div className={s.right}>
           <span className={s.time}>2022-06<Icon className={s.arrow} type="arrow-bottom" /></span>
@@ -96,6 +122,7 @@ const Home = () => {
           </Pull> : null
       }
     </div>
+    <PopupType ref={typeRef} onSelect={select} />
   </div>
 }
 
