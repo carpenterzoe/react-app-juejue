@@ -160,7 +160,9 @@ const Home = () => {
     {/* ref 在父组件用到子组件时绑定 */}
     <PopupType ref={typeRef} onSelect={select} />
     <PopupDate ref={monthRef} mode={['year', 'month']} onSelect={selectMonth} />
-    <PopupAddBill ref={addRef} />
+    
+    {/* 子组件调 props.onReload() 刷新父组件 */}
+    <PopupAddBill ref={addRef} onReload={refreshData} />
   </div>
 }
 
