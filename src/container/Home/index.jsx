@@ -2,9 +2,12 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Icon, Pull, List } from 'zarm'
 import dayjs from 'dayjs'
 
+import CustomIcon from '@/components/CustomIcon'
 import BillItem from '@/components/BillItem'
+
 import PopupType from '@/components/PopupType'
 import PopupDate from '@/components/PopupDate'
+import PopupAddBill from '@/components/PopupAddBill'
 
 import { get, REFRESH_STATE, LOAD_STATE } from '@/utils' // Pull 组件需要的一些常量
 
@@ -25,6 +28,7 @@ const Home = () => {
    */
   const typeRef = useRef(); // 账单类型 ref
   const monthRef = useRef(); // 月份筛选 ref
+  const addRef = useRef(); // 添加账单项 ref
 
   const [currentSelect, setCurrentSelect] = useState({}); // 当前筛选类型
   const [currentTime, setCurrentTime] = useState(dayjs().format('YYYY-MM')); // 当前筛选时间
@@ -80,12 +84,15 @@ const Home = () => {
     }
   }
 
-  // 添加账单弹窗
+  // popup
   const typeToggle = () => {
     typeRef.current && typeRef.current.show() // 访问子组件的方法
   };
   const monthToggle = () => {
     monthRef.current && monthRef.current.show()
+  }
+  const addToggle = () => {
+    addRef.current && addRef.current.show()
   }
 
   // 选中账单类型
@@ -146,9 +153,14 @@ const Home = () => {
           </Pull> : null
       }
     </div>
+
+    {/* add bill */}
+    <div className={s.add} onClick={addToggle}><CustomIcon type='tianjia' /></div>
+
     {/* ref 在父组件用到子组件时绑定 */}
     <PopupType ref={typeRef} onSelect={select} />
     <PopupDate ref={monthRef} mode={['year', 'month']} onSelect={selectMonth} />
+    <PopupAddBill ref={addRef} />
   </div>
 }
 
