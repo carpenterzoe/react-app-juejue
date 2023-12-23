@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
-import { NavBar, Icon } from 'zarm'
+import { NavBar } from 'zarm'
+import { ArrowLeft } from '@zarm-design/icons'
 
 import s from './style.module.less'
 
@@ -12,13 +13,7 @@ const Header = ({ title = '' }) => {
       <div className={s.block}>
         <NavBar
           className={s.header}
-          left={
-            <Icon
-              type="arrow-left"
-              theme="primary"
-              onClick={() => navigateTo(-1)}
-            />
-          }
+          left={<ArrowLeft onClick={() => navigateTo(-1)} theme="primary" />}
           title={title}
         />
       </div>
