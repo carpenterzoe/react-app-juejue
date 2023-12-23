@@ -53,7 +53,10 @@ const PopupAddBill = forwardRef((props, ref) => {
     const _income = list.filter((i) => i.type == 2) // 收入类型
     setExpense(_expense)
     setIncome(_income)
-    setCurrentType(_expense[0]) // 新建账单，类型默认是支出类型数组的第一项
+
+    if (!props.detail.id) {
+      setCurrentType(_expense[0]) // 新建账单，类型默认是支出类型数组的第一项
+    }
   }
 
   const changeType = (type) => {
@@ -67,6 +70,7 @@ const PopupAddBill = forwardRef((props, ref) => {
     setDate(new Date())
     setRemark('')
   }
+
   const addBill = async () => {
     if (!amount) return Toast.show('请输入金额')
 
@@ -77,12 +81,16 @@ const PopupAddBill = forwardRef((props, ref) => {
       date: dayjs(date).unix() * 1000, // 日期传时间戳
       pay_type: payType == 'expense' ? 1 : 2, // 账单类型传 1 或 2
       remark: remark || '', // 备注
+      id: props.detail.id || '',
     }
-    console.log('params', params)
-    const result = await post('/api/bill/add', params)
-    console.log('result: ', result)
-    Toast.show('添加成功')
 
+    const api = props.detail.id ? '/api/bill/update' : '/api/bill/add'
+    try {
+      await post(api, params)
+      Toast.show('添加成功')
+    } catch (error) {
+      console.log('error: ', error)
+    }
     resetBill() // 重置数据
     setShow(false)
 
@@ -122,9 +130,27 @@ const PopupAddBill = forwardRef((props, ref) => {
     setAmount(amount + value)
   }
 
+  const initDetail = () => {
+    const detail = props.detail
+    if (detail.id) {
+      setPayType(detail.pay_type == 1 ? 'expense' : 'income')
+      setCurrentType({
+        id: detail.type_id,
+        name: detail.type_name,
+      })
+      setRemark(detail.remark)
+      setAmount(detail.amount)
+      setDate(dayjs(Number(detail.date)).$d)
+    }
+  }
+
   useEffect(() => {
     getType()
   }, [])
+
+  useEffect(() => {
+    initDetail()
+  }, [props.detail])
 
   return (
     <Popup
@@ -241,6 +267,7 @@ const PopupAddBill = forwardRef((props, ref) => {
 
 PopupAddBill.propTypes = {
   onReload: PropTypes.func,
+  detail: PropTypes.object,
 }
 
 export default PopupAddBill
