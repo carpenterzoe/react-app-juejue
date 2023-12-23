@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 
+import PopupAddBill from '@/components/PopupAddBill'
 import Header from '@/components/Header'
 import CustomIcon from '@/components/CustomIcon'
 import { Modal, Toast } from 'zarm'
@@ -35,6 +36,8 @@ const Detail = () => {
       },
     })
   }
+
+  const editRef = useRef()
 
   useEffect(() => {
     getDetail()
@@ -84,12 +87,14 @@ const Detail = () => {
             <CustomIcon type="shanchu" />
             删除
           </span>
-          <span>
+          <span onClick={() => editRef.current && editRef.current.show()}>
             <CustomIcon type="tianjia" />
             编辑
           </span>
         </div>
       </div>
+
+      <PopupAddBill ref={editRef} detail={detail} onReload={getDetail} />
     </div>
   )
 }
