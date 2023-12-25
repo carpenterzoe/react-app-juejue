@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { List } from 'zarm'
+import { List, Button } from 'zarm'
 
 import { get } from '@/utils'
 
@@ -20,6 +20,11 @@ const User = () => {
   }
 
   const navigateTo = useNavigate()
+
+  const logout = async () => {
+    localStorage.removeItem('token')
+    navigateTo('/login')
+  }
 
   return (
     <div className={s.user}>
@@ -59,7 +64,7 @@ const User = () => {
           />
           <List.Item
             hasArrow={true}
-            title="重制密码"
+            title="重置密码"
             onClick={() => navigateTo('/account')}
             icon={
               <img
@@ -83,6 +88,10 @@ const User = () => {
           />
         </List>
       </div>
+
+      <Button className={s.logout} block theme="danger" onClick={logout}>
+        退出登录
+      </Button>
     </div>
   )
 }
