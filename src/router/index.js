@@ -3,6 +3,7 @@ import Data from '@/container/Data'
 import User from '@/container/User'
 import Login from '@/container/Login'
 import Detail from '@/container/Detail'
+import Userinfo from '@/container/Userinfo'
 
 const routes = [
   {
@@ -24,6 +25,10 @@ const routes = [
   {
     path: '/detail',
     component: Detail,
+  },
+  {
+    path: '/userinfo',
+    component: Userinfo,
   },
 ]
 
