@@ -54,7 +54,7 @@ const PopupAddBill = forwardRef((props, ref) => {
     setExpense(_expense)
     setIncome(_income)
 
-    if (!props.detail.id) {
+    if (!props.detail?.id) {
       setCurrentType(_expense[0]) // 新建账单，类型默认是支出类型数组的第一项
     }
   }
@@ -81,10 +81,10 @@ const PopupAddBill = forwardRef((props, ref) => {
       date: dayjs(date).unix() * 1000, // 日期传时间戳
       pay_type: payType == 'expense' ? 1 : 2, // 账单类型传 1 或 2
       remark: remark || '', // 备注
-      id: props.detail.id || '',
+      id: props.detail?.id || '',
     }
 
-    const api = props.detail.id ? '/api/bill/update' : '/api/bill/add'
+    const api = props.detail?.id ? '/api/bill/update' : '/api/bill/add'
     try {
       await post(api, params)
       Toast.show('添加成功')
@@ -132,7 +132,7 @@ const PopupAddBill = forwardRef((props, ref) => {
 
   const initDetail = () => {
     const detail = props.detail
-    if (detail.id) {
+    if (detail?.id) {
       setPayType(detail.pay_type == 1 ? 'expense' : 'income')
       setCurrentType({
         id: detail.type_id,
